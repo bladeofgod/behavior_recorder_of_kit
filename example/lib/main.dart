@@ -3,7 +3,10 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:behavior_recorder_of_kit/behavior_recorder_of_kit.dart';
+import 'package:behavior_recorder_of_kit_example/hook_example.dart';
 
+///flutter/bin/cache/dart-sdk/bin/dart dart-sdk/sdk/pkg/vm/bin/dump_kernel.dart behavior_recorder_of_kit/example/.dart_tool/flutter_build/9808370ea32bdc205f8f752e6ebb568e/app.dill out.dill.txt
+///
 void main() {
   runApp(const MyApp());
 }
@@ -26,6 +29,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    print('normal print');
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.

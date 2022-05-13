@@ -6,7 +6,7 @@ description: Demonstrates how to use the behavior_recorder_of_kit plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.14.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,7 +28,12 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^0.1.2
+
+  beike_aspectd:
+    git:
+      url: https://github.com/LianjiaTech/Beike_AspectD.git
+      ref: null-safety/2.5.3
 
 dev_dependencies:
   flutter_test:

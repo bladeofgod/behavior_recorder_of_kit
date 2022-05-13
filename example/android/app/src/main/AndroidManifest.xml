@@ -2,7 +2,6 @@
     package="com.lijiaqi.behavior_recorder_of_kit_example">
    <application
         android:label="behavior_recorder_of_kit_example"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

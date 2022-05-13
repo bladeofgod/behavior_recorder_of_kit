@@ -4,12 +4,17 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.14.2 <3.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  beike_aspectd:
+    git:
+      url: https://github.com/LianjiaTech/Beike_AspectD.git
+      ref: null-safety/2.5.3
 
 dev_dependencies:
   flutter_test:
