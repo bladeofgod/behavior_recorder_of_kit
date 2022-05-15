@@ -59,20 +59,7 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(onPressed: () {
                   gestureRecorder.eventRecords.removeLast();
 
-                  Stream<Queue<PointerEvent>> action(int len) async* {
-                    for(int i = 0; i < len; i++) {
-                      final bundle = gestureRecorder.eventRecords.removeFirst();
-                      yield bundle.eventQueue;
-                      final nextStart = gestureRecorder.eventRecords.first.startTime;
-                      await Future.delayed(Duration(milliseconds: nextStart - bundle.endTime));
-                    }
-                  }
-
-                  action(gestureRecorder.eventRecords.length).listen((event) {
-                    while(event.isNotEmpty) {
-                      GestureBinding.instance?.handlePointerEvent(event.removeFirst());
-                    }
-                  });
+                  gestureRecorder.play();
 
                 }, child: const Text('replay')),
 

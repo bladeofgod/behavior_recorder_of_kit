@@ -1,6 +1,7 @@
 
 import 'dart:collection';
 
+import 'package:behavior_recorder_of_kit/record_player.dart';
 import 'package:beike_aspectd/aspectd.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -39,7 +40,7 @@ class PointerEventBundle{
 }
 
 
-class GestureRecorder implements GestureHookHandler{
+class GestureRecorder with RecordPlayer implements GestureHookHandler{
 
   final Queue<PointerEventBundle> _recordQueue = Queue<PointerEventBundle>();
 
@@ -57,7 +58,7 @@ class GestureRecorder implements GestureHookHandler{
 
   @override
   void handlePointerEventHook(PointCut pointCut) {
-    if(pointCut.positionalParams.isEmpty) {
+    if(pointCut.positionalParams.isEmpty || playerStatus == PlayerStatus.playing) {
       return;
     }
     startTime ??= timeStamp;
@@ -70,6 +71,10 @@ class GestureRecorder implements GestureHookHandler{
       _cacheBucket.clear();
     }
   }
+
+  @override
+  Queue<PointerEventBundle> get bundleQueue => _recordQueue;
+
 }
 
 
