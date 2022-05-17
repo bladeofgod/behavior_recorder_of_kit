@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:behavior_recorder_of_kit/gesture_hook.dart';
+
 import 'package:flutter/services.dart';
 import 'package:behavior_recorder_of_kit/behavior_recorder_of_kit.dart';
 // import 'package:behavior_recorder_of_kit_example/hook_example.dart';
@@ -31,6 +31,18 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  Future<Map<String, dynamic>> keyMsg(dynamic msg) {
+    print(msg.toString());
+    print('---');
+    return Future.value({});
+  }
+
+  bool test(KeyData keyData) {
+    print('${keyData.toStringFull()}');
+    print('-----');
+    return ServicesBinding.instance?.keyEventManager.handleKeyData(keyData) ?? false;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +66,23 @@ class _MyAppState extends State<MyApp> {
                   debugPrint('3');
                 }, child: const Text('3')),
 
+                const SizedBox(
+                  width: double.infinity, height: 20,
+                  child: TextField(),
+                ),
+
                 const Divider(height: 2, color: Colors.red,),
 
                 ElevatedButton(onPressed: () {
-                  gestureRecorder.eventRecords.removeLast();
+                  RecordPlayer().removeLast();
 
-                  gestureRecorder.play();
+                  RecordPlayer().play();
 
                 }, child: const Text('replay')),
 
                 ElevatedButton(onPressed: () {
                   Future.delayed(const Duration(seconds: 1), () {
-                    gestureRecorder.cleanRecords();
+                    RecordPlayer().eraseTape();
                   });
                 }, child: const Text('clean')),
 
