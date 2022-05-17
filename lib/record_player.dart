@@ -23,7 +23,7 @@ enum PlayerStatus{
 }
 
 enum SourceType{
-  text,
+  textInput,
   gesture,
 }
 
@@ -72,14 +72,19 @@ class RecordPlayer{
   ///remove [_timeLine]'s last element, and related source's last element.
   ///
   /// * sometime we trigger [play] by a tap, and this will be record in queue,
-  /// * so we need to remove the last element.
-  void removeLast() {
+  /// * so we need to remove the last element by [withType] = [SourceType.gesture].
+  ///
+  void removeLast({SourceType? withType}) {
     if(_timeLine.isNotEmpty) {
       _timeLine.removeLast();
     }
-    _listenrs.forEach((key, value) {
-      value.removeLast();
-    });
+    if(withType != null) {
+      _listenrs[withType]?.removeLast();
+    } else {
+      _listenrs.forEach((key, value) {
+        value.removeLast();
+      });
+    }
   }
 
   void play() {

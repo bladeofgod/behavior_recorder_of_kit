@@ -70,10 +70,6 @@ class GestureRecorder extends Recorder<PointerEventBundle>{
     }
   }
 
-  @override
-  RecordBundle? extractRecordBundle(int startTime) {
-    return (recordQueue.isNotEmpty && recordQueue.first.startTime == startTime) ? recordQueue.removeFirst() : null;
-  }
 
   @override
   SourceType get type => SourceType.gesture;

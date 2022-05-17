@@ -65,6 +65,11 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
     }
   }
 
+  @override
+  RecordBundle? extractRecordBundle(int startTime) {
+    return (recordQueue.isNotEmpty && recordQueue.first.startTime == startTime) ? recordQueue.removeFirst() : null;
+  }
+
   SourceType get type;
 
   void handleHook(PointCut pointCut);

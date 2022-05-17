@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 const Divider(height: 2, color: Colors.red,),
 
                 ElevatedButton(onPressed: () {
-                  RecordPlayer().removeLast();
+                  RecordPlayer().removeLast(withType: SourceType.gesture);
 
                   RecordPlayer().play();
 
