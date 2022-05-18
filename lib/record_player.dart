@@ -15,6 +15,11 @@ abstract class RecordPlayerListener{
   ///  * it's only matched one event-bundle in many sources.
   RecordBundle? extractRecordBundle(int startTime);
 
+  ///Load a event-bundle from outer.
+  ///
+  /// Must invoke [RecordPlayer.startRecord] before call this.
+  void loadRecordBundle(RecordBundle bundle);
+
   ///clean all event-record of source.
   void cleanRecords();
 
@@ -161,7 +166,30 @@ class RecordPlayer{
   }
 
 
-  // Queue<RecordBundle> getTap() {}
+  ///Remove all real event that relatited [_timeLine] to a tape(queue).
+  ///
+  /// * You can use it for serialize and transfor anthor device to replay it.
+  /// * Ensure target device has this plugin too.
+  Queue<RecordBundle> exportTape() {
+    final Queue<RecordBundle> tape = Queue();
+    while(_timeLine.isNotEmpty) {
+      final slot = _timeLine.removeFirst();
+      final bundle = _listenrs[slot.type]?.extractRecordBundle(slot.startTime);
+      if(bundle != null) {
+        tape.add(bundle);
+      }
+    }
+    return tape;
+  }
+
+
+  ///Load event bundle from outer, like: memory, disk or net.
+  ///
+  /// * Make sure you [startRecord] before call this method, and [finishRecord]
+  /// * after this.
+  void loadRecords<T extends RecordBundle>(T bundle) {
+    _listenrs[bundle.type]?.loadRecordBundle(bundle);
+  }
 
 }
 

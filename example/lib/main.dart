@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  final Queue<RecordBundle> cache = Queue();
 
   OverlayEntry? entry;
 
@@ -54,12 +57,26 @@ class _MyAppState extends State<MyApp> {
                   Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => const DemoPage(text: 'page-root')));
                 }, child: const Text('to demo page')),
 
+                const Divider(height: 4, color: Colors.blue,),
+
+                ElevatedButton(onPressed: () {
+                  cache.addAll(RecordPlayer().exportTape());
+                }, child: const Text('make a tape')),
+
+                ElevatedButton(onPressed: () {
+                  RecordPlayer().startRecord();
+                  while(cache.isNotEmpty) {
+                    RecordPlayer().loadRecords(cache.removeFirst());
+                  }
+                  RecordPlayer().finishRecord();
+                }, child: const Text('load a tape')),
+
                 // const SizedBox(
                 //   width: double.infinity, height: 20,
                 //   child: TextField(),
                 // ),
 
-                const Divider(height: 2, color: Colors.red,),
+                const Divider(height: 4, color: Colors.red,),
 
                 ElevatedButton(onPressed: () {
                   RecordPlayer().play();

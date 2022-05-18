@@ -4,10 +4,13 @@ import 'dart:collection';
 
 import 'package:behavior_recorder_of_kit/record_player.dart';
 import 'package:beike_aspectd/aspectd.dart';
+import 'package:flutter/cupertino.dart';
 
 ///A base class for event bundle.
 ///It cache a real event and performe it.
 abstract class RecordBundle<T>{
+
+  RecordBundle(this.startTime, this.endTime, this.type);
 
   ///For make this bundle occure an error.
   bool get isErrorBundle => startTime <= 0;
@@ -18,13 +21,15 @@ abstract class RecordBundle<T>{
   ///A bundle of event's closure time.
   final int endTime;
 
-  RecordBundle(this.startTime, this.endTime);
+  ///The event from what kind of source type.
+  final SourceType type;
 
   ///Get event' record
   T get eventRecord;
 
   ///Perform the [eventRecord]
   void performe();
+
 
 }
 
@@ -81,6 +86,15 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   @override
   RecordBundle? extractRecordBundle(int startTime) {
     return (recordQueue.isNotEmpty && recordQueue.first.startTime == startTime) ? recordQueue.removeFirst() : null;
+  }
+
+  @override
+  void loadRecordBundle(RecordBundle bundle) {
+    try{
+      enqueu(bundle as T);
+    }catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   ///The event's type.

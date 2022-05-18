@@ -24,7 +24,8 @@ class TextInputHook{
 ///Text-inpute event's bundle.
 class TextInputEventBundle extends RecordBundle<MethodCall>{
 
-  TextInputEventBundle(int startTime, int endTime, this.methodCall) : super(startTime, endTime);
+  TextInputEventBundle(int startTime, int endTime, SourceType type,this.methodCall)
+      : super(startTime, endTime, type);
 
   final MethodCall methodCall;
 
@@ -67,7 +68,7 @@ class TextInputRecorder extends Recorder<TextInputEventBundle> {
       }
     }
     final int endTime = DateTime.now().millisecondsSinceEpoch;
-    enqueu(TextInputEventBundle(startTime, endTime, methodCall));
+    enqueu(TextInputEventBundle(startTime, endTime, type, methodCall));
   }
 
   @override
