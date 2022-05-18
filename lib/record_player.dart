@@ -30,7 +30,7 @@ enum PlayerStatus{
   playing,
 
   ///record-player are ready for record some event, only in this status.
-  idle,
+  recording,
 
   /// Disable the player
   ///
@@ -89,7 +89,7 @@ class RecordPlayer{
 
   ///This method will open recorder's function, than you can record some action.
   void startRecord() {
-    playerStatus.value = PlayerStatus.idle;
+    playerStatus.value = PlayerStatus.recording;
   }
 
   ///This method will close recorder's function, normaly you can play replay

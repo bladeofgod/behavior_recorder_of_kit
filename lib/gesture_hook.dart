@@ -7,7 +7,7 @@ import 'package:beike_aspectd/aspectd.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 
-
+///A gesture event recorder, you can replace it for custom.
 GestureRecorder gestureRecorder = GestureRecorder();
 
 @Aspect()

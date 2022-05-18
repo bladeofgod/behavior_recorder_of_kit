@@ -37,7 +37,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   Recorder() {
     RecordPlayer().registerSrource(type, this);
     RecordPlayer().playerStatus.addListener(_playerLIstener);
-    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.idle;
+    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.recording;
   }
 
   ///For record event.
@@ -52,7 +52,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
 
   ///For listen the [RecordPlayer]'s [PlayerStatus].
   void _playerLIstener() {
-    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.idle;
+    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.recording;
   }
 
   ///Record an event.

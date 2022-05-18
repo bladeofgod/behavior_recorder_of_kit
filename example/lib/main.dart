@@ -1,7 +1,5 @@
-import 'dart:collection';
-import 'dart:ui';
+import 'dart:math' as math;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -25,20 +23,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  PlayerStatus status = PlayerStatus.shutdown;
-
-  @override
-  void initState() {
-    super.initState();
-
-    RecordPlayer().playerStatus.addListener(() {
-      setState(() {
-        status = RecordPlayer().playerStatus.value;
-      });
-    });
-  }
-
-
+  OverlayEntry? entry;
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +34,25 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Builder(
           builder: (ctx) {
+            if(entry == null) {
+              entry = OverlayEntry(builder: (_) => const Positioned(
+                right: 40, bottom: 100,
+                  child: FloatWidget()));
+              Future.delayed(const Duration(milliseconds: 100)).then((value) => Overlay.of(ctx)?.insert(entry!));
+            }
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(onPressed: () {
                   RecordPlayer().startRecord();
-                }, child: const Text('open player')),
+                }, child: const Text('start recording')),
                 ElevatedButton(onPressed: () {
                   RecordPlayer().removeLast(withType: SourceType.gesture);
                   RecordPlayer().finishRecord();
-                }, child: const Text('shutdown player')),
+                }, child: const Text('finish recording.')),
                 ElevatedButton(onPressed: () {
                   Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => const DemoPage(text: 'page-root')));
-                }, child: const Text('to demoPage')),
+                }, child: const Text('to demo page')),
 
                 // const SizedBox(
                 //   width: double.infinity, height: 20,
@@ -84,26 +75,75 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print('tap');
-          },child: Icon(buildIcon()),
-        ),
       ),
     );
   }
-  IconData buildIcon() {
+
+
+
+}
+
+class FloatWidget extends StatefulWidget{
+  const FloatWidget({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return FloatWidgetState();
+  }
+
+}
+
+class FloatWidgetState extends State<FloatWidget> {
+
+  PlayerStatus status = PlayerStatus.shutdown;
+
+  double opacity = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    RecordPlayer().playerStatus.addListener(() {
+      setState(() {
+        status = RecordPlayer().playerStatus.value;
+      });
+    });
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if(status == PlayerStatus.recording) {
+        setState(() {
+          opacity = (opacity - 1).abs();
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50, height: 50,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blue,
+      ),
+      child: buildIcon(),
+    );
+  }
+
+  Widget buildIcon() {
     switch(status) {
       case PlayerStatus.playing:
-        return Icons.pause;
-      case PlayerStatus.idle:
-        return Icons.play_arrow;
+        return const Icon(Icons.pause, color: Colors.white, size: 30,);
+      case PlayerStatus.recording:
+        return AnimatedOpacity(opacity: opacity, duration: const Duration(seconds: 1),
+          child: const Icon(Icons.fiber_smart_record_rounded, color: Colors.red, size: 30,),);
       case PlayerStatus.shutdown:
-        return Icons.clear;
+        return const Icon(Icons.play_arrow, color: Colors.white, size: 30);
     }
   }
 
 }
+
 
 int count = 0;
 

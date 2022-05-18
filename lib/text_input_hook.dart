@@ -6,6 +6,7 @@ import 'package:behavior_recorder_of_kit/recorder.dart';
 import 'package:beike_aspectd/aspectd.dart';
 import 'package:flutter/services.dart';
 
+///A text-input event recorder, you can replace it for custom.
 TextInputRecorder textInputRecorder = TextInputRecorder();
 
 
