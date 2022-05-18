@@ -105,7 +105,7 @@ class RecordPlayer{
 
 
   ///[Recorder] register a [RecordPlayerListener] by this method.
-  ///And will make it have reocorder and play function.
+  ///And will make it have recorder and play function.
   void registerSource(SourceType type, RecordPlayerListener listener) {
     _listeners[type] = listener;
   }
