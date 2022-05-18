@@ -19,7 +19,11 @@ abstract class RecordPlayerListener{
 
 enum PlayerStatus{
   playing,
+
   idle,
+
+  /// Disable the player
+  shutdown,
 }
 
 enum SourceType{
@@ -52,7 +56,16 @@ class RecordPlayer{
 
   final Map<SourceType, RecordPlayerListener> _listenrs = {};
 
-  final ValueNotifier<PlayerStatus> playerStatus = ValueNotifier(PlayerStatus.idle);
+  final ValueNotifier<PlayerStatus> playerStatus = ValueNotifier(PlayerStatus.shutdown);
+
+  void startRecord() {
+    playerStatus.value = PlayerStatus.idle;
+  }
+
+  void finishRecord() {
+    playerStatus.value = PlayerStatus.shutdown;
+  }
+
 
   void registerSrource(SourceType type, RecordPlayerListener listenr) {
     _listenrs[type] = listenr;
@@ -100,11 +113,13 @@ class RecordPlayer{
       final bundle = _listenrs[slot.type]?.extractRecordBundle(slot.startTime);
       if(bundle != null && !bundle.isErrorBundle) {
         yield bundle;
-        final nextStartTime = _timeLine.first.startTime;
-        await Future.delayed(Duration(milliseconds: nextStartTime - bundle.endTime));
+        if(_timeLine.isNotEmpty) {
+          final nextStartTime = _timeLine.first.startTime;
+          await Future.delayed(Duration(milliseconds: nextStartTime - bundle.endTime));
+        }
       }
     }
-    playerStatus.value = PlayerStatus.idle;
+    playerStatus.value = PlayerStatus.shutdown;
   }
 
 

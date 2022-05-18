@@ -25,23 +25,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  PlayerStatus status = PlayerStatus.shutdown;
 
   @override
   void initState() {
     super.initState();
+
+    RecordPlayer().playerStatus.addListener(() {
+      setState(() {
+        status = RecordPlayer().playerStatus.value;
+      });
+    });
   }
 
-  Future<Map<String, dynamic>> keyMsg(dynamic msg) {
-    print(msg.toString());
-    print('---');
-    return Future.value({});
-  }
-
-  bool test(KeyData keyData) {
-    print('${keyData.toStringFull()}');
-    print('-----');
-    return ServicesBinding.instance?.keyEventManager.handleKeyData(keyData) ?? false;
-  }
 
 
   @override
@@ -57,27 +53,25 @@ class _MyAppState extends State<MyApp> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(onPressed: () {
-                  debugPrint('1');
-                }, child: const Text('1')),
+                  RecordPlayer().startRecord();
+                }, child: const Text('open player')),
                 ElevatedButton(onPressed: () {
-                  debugPrint('2');
-                }, child: const Text('2')),
+                  RecordPlayer().removeLast(withType: SourceType.gesture);
+                  RecordPlayer().finishRecord();
+                }, child: const Text('shutdown player')),
                 ElevatedButton(onPressed: () {
-                  debugPrint('3');
-                }, child: const Text('3')),
+                  Navigator.of(ctx).push(MaterialPageRoute(builder: (_) => const DemoPage(text: 'page-root')));
+                }, child: const Text('to demoPage')),
 
-                const SizedBox(
-                  width: double.infinity, height: 20,
-                  child: TextField(),
-                ),
+                // const SizedBox(
+                //   width: double.infinity, height: 20,
+                //   child: TextField(),
+                // ),
 
                 const Divider(height: 2, color: Colors.red,),
 
                 ElevatedButton(onPressed: () {
-                  RecordPlayer().removeLast(withType: SourceType.gesture);
-
                   RecordPlayer().play();
-
                 }, child: const Text('replay')),
 
                 ElevatedButton(onPressed: () {
@@ -93,9 +87,90 @@ class _MyAppState extends State<MyApp> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             print('tap');
-          },
+          },child: Icon(buildIcon()),
+        ),
+      ),
+    );
+  }
+  IconData buildIcon() {
+    switch(status) {
+      case PlayerStatus.playing:
+        return Icons.pause;
+      case PlayerStatus.idle:
+        return Icons.play_arrow;
+      case PlayerStatus.shutdown:
+        return Icons.clear;
+    }
+  }
+
+}
+
+int count = 0;
+
+class DemoPage extends StatefulWidget{
+
+  final String text;
+
+  const DemoPage({Key? key, required this.text}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return DemoPageState();
+  }
+
+}
+
+class DemoPageState extends State<DemoPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    count++;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text('page-$count is from : ${widget.text}', style: const TextStyle(color: Colors.black, fontSize: 18),),
+            ElevatedButton(onPressed: () {
+              if(count == 3) {
+                count = 0;
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => DemoPage(text: 'page-$count')));
+              }
+            }, child: Text('btn - $count')),
+            if(count == 3)
+              TextField(),
+          ],
         ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

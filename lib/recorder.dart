@@ -29,18 +29,19 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   Recorder() {
     RecordPlayer().registerSrource(type, this);
     RecordPlayer().playerStatus.addListener(_playerLIstener);
+    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.idle;
   }
 
   final Queue<T> _recordQueue = Queue<T>();
 
-  bool _frozen = false;
+  bool _frozen = true;
 
   Queue<T> get recordQueue => _recordQueue;
 
   bool get frozen => _frozen;
 
   void _playerLIstener() {
-    _frozen = RecordPlayer().playerStatus.value == PlayerStatus.playing;
+    _frozen = RecordPlayer().playerStatus.value != PlayerStatus.idle;
   }
 
   void enqueu(T t, {bool needRecord = true}) {
