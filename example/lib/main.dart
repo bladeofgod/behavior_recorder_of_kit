@@ -122,6 +122,8 @@ class DemoPage extends StatefulWidget{
 
 class DemoPageState extends State<DemoPage> {
 
+  double sliderV = 0.5;
+
   @override
   void initState() {
     super.initState();
@@ -138,6 +140,12 @@ class DemoPageState extends State<DemoPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text('page-$count is from : ${widget.text}', style: const TextStyle(color: Colors.black, fontSize: 18),),
+            if(count == 2)
+              Slider(value: sliderV, onChanged: (v) {
+                setState(() {
+                  sliderV = v;
+                });
+              }),
             ElevatedButton(onPressed: () {
               if(count == 3) {
                 count = 0;
@@ -147,7 +155,7 @@ class DemoPageState extends State<DemoPage> {
               }
             }, child: Text('btn - $count')),
             if(count == 3)
-              TextField(),
+              const TextField(),
           ],
         ),
       ),
