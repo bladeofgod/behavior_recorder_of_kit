@@ -7,7 +7,7 @@ import 'package:beike_aspectd/aspectd.dart';
 import 'package:flutter/services.dart';
 
 ///A text-input event recorder, you can replace it for custom.
-TextInputRecorder textInputRecorder = TextInputRecorder();
+Recorder textInputRecorder = TextInputRecorder();
 
 
 @Aspect()
@@ -21,7 +21,7 @@ class TextInputHook{
   }
 }
 
-///Text-inpute event's bundle.
+///Text-input event's bundle.
 class TextInputEventBundle extends RecordBundle<MethodCall>{
 
   TextInputEventBundle(int startTime, int endTime, SourceType type,this.methodCall)
@@ -33,7 +33,7 @@ class TextInputEventBundle extends RecordBundle<MethodCall>{
   MethodCall get eventRecord => methodCall;
 
   @override
-  void performe() {
+  void perform() {
     _updateRecord();
     final bytedata = SystemChannels.textInput.codec.encodeMethodCall(methodCall);
     ServicesBinding.instance?.defaultBinaryMessenger.handlePlatformMessage(SystemChannels.textInput.name, bytedata, null);

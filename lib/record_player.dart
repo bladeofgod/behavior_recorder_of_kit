@@ -145,7 +145,7 @@ class RecordPlayer{
   void play() {
     playerStatus.value = PlayerStatus.playing;
     _decodeTape().listen((bundle) {
-      bundle.performe();
+      bundle.perform();
     });
   }
 

@@ -52,7 +52,7 @@ class YourRecordBundle extends RecordBundle<YourEvent> {
     //...code
 }
 
-///事件的收录并形成 事件包
+///事件收录器,记录事件并产出 事件包
 class YourRecorder extends Recorder<YourRecordBundle> {
     //...code
 }

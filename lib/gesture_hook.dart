@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 
 ///A gesture event recorder, you can replace it for custom.
-GestureRecorder gestureRecorder = GestureRecorder();
+Recorder gestureRecorder = GestureRecorder();
 
 @Aspect()
 @pragma('vm:entry-point')
@@ -35,7 +35,7 @@ class PointerEventBundle extends RecordBundle<Queue<PointerEvent>>{
   Queue<PointerEvent> get eventRecord => _eventQueue;
 
   @override
-  void performe() {
+  void perform() {
     while(_eventQueue.isNotEmpty) {
       GestureBinding.instance?.handlePointerEvent(_eventQueue.removeFirst());
     }

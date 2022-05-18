@@ -7,12 +7,12 @@ import 'package:beike_aspectd/aspectd.dart';
 import 'package:flutter/cupertino.dart';
 
 ///A base class for event bundle.
-///It cache a real event and performe it.
+///It cache a real event and perform it.
 abstract class RecordBundle<T>{
 
   RecordBundle(this.startTime, this.endTime, this.type);
 
-  ///For make this bundle occure an error.
+  ///For make this bundle occured an error.
   bool get isErrorBundle => startTime <= 0;
 
   ///A bundle of event's start time.
@@ -28,7 +28,7 @@ abstract class RecordBundle<T>{
   T get eventRecord;
 
   ///Perform the [eventRecord]
-  void performe();
+  void perform();
 
 
 }
@@ -41,7 +41,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
 
   Recorder() {
     RecordPlayer().registerSrource(type, this);
-    RecordPlayer().playerStatus.addListener(_playerLIstener);
+    RecordPlayer().playerStatus.addListener(_playerListener);
     _frozen = RecordPlayer().playerStatus.value != PlayerStatus.recording;
   }
 
@@ -56,7 +56,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   bool get frozen => _frozen;
 
   ///For listen the [RecordPlayer]'s [PlayerStatus].
-  void _playerLIstener() {
+  void _playerListener() {
     _frozen = RecordPlayer().playerStatus.value != PlayerStatus.recording;
   }
 
