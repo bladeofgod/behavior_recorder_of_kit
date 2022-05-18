@@ -23,6 +23,7 @@ class GestureHook{
 
 }
 
+///Text-inpute event's bundle.
 class PointerEventBundle extends RecordBundle<Queue<PointerEvent>>{
 
   PointerEventBundle.load(int startTime, int endTime, this._eventQueue)
@@ -43,7 +44,9 @@ class PointerEventBundle extends RecordBundle<Queue<PointerEvent>>{
 
 }
 
-
+///Gesture recorder will record all event about gesture.
+///
+/// Also see [PlayerStatus].
 class GestureRecorder extends Recorder<PointerEventBundle>{
 
   ///one serials pointer-event bucket.

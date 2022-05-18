@@ -20,6 +20,7 @@ class TextInputHook{
   }
 }
 
+///Text-inpute event's bundle.
 class TextInputEventBundle extends RecordBundle<MethodCall>{
 
   TextInputEventBundle(int startTime, int endTime, this.methodCall) : super(startTime, endTime);
@@ -45,9 +46,10 @@ class TextInputEventBundle extends RecordBundle<MethodCall>{
 
 }
 
-
+///Text-input recorder will record all event about text-input.
 class TextInputRecorder extends Recorder<TextInputEventBundle> {
 
+  ///mark a client id.
   static int id = 0;
 
   @override
