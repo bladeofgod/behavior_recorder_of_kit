@@ -40,7 +40,7 @@ abstract class RecordBundle<T>{
 abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
 
   Recorder() {
-    RecordPlayer().registerSrource(type, this);
+    RecordPlayer().registerSource(type, this);
     RecordPlayer().playerStatus.addListener(_playerListener);
     _frozen = RecordPlayer().playerStatus.value != PlayerStatus.recording;
   }
@@ -61,7 +61,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   }
 
   ///Record an event.
-  void enqueu(T t, {bool needRecord = true}) {
+  void enqueue(T t, {bool needRecord = true}) {
     if(frozen) {
       return;
     }
@@ -91,7 +91,7 @@ abstract class Recorder<T extends RecordBundle> implements RecordPlayerListener{
   @override
   void loadRecordBundle(RecordBundle bundle) {
     try{
-      enqueu(bundle as T);
+      enqueue(bundle as T);
     }catch (e) {
       debugPrint(e.toString());
     }

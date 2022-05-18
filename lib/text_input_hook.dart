@@ -68,7 +68,7 @@ class TextInputRecorder extends Recorder<TextInputEventBundle> {
       }
     }
     final int endTime = DateTime.now().millisecondsSinceEpoch;
-    enqueu(TextInputEventBundle(startTime, endTime, type, methodCall));
+    enqueue(TextInputEventBundle(startTime, endTime, type, methodCall));
   }
 
   @override

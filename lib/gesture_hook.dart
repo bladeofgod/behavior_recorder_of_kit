@@ -23,7 +23,7 @@ class GestureHook{
 
 }
 
-///Text-inpute event's bundle.
+///Gesture event's bundle.
 class PointerEventBundle extends RecordBundle<Queue<PointerEvent>>{
 
   PointerEventBundle.load(int startTime, int endTime, SourceType type, this._eventQueue)
@@ -67,7 +67,7 @@ class GestureRecorder extends Recorder<PointerEventBundle>{
     _cacheBucket.add(event);
     if(event is PointerUpEvent || event is PointerCancelEvent) {
       final int endTime = DateTime.now().millisecondsSinceEpoch;
-      enqueu(PointerEventBundle.load(startTime!, endTime, type, Queue.from(_cacheBucket)));
+      enqueue(PointerEventBundle.load(startTime!, endTime, type, Queue.from(_cacheBucket)));
       startTime = null;
       _cacheBucket.clear();
     }

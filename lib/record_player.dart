@@ -53,7 +53,7 @@ enum SourceType{
 
 ///a slot of tape.
 ///
-/// * it marke a event-bundle by [startTime] and [type] , fetch by [RecordPlayerListener.extractRecordBundle].
+/// * it mark a event-bundle by [startTime] and [type] , fetch by [RecordPlayerListener.extractRecordBundle].
 class TapeSlot{
 
   ///startTime of [RecordBundle]
@@ -69,7 +69,7 @@ class TapeSlot{
 
 /// A recorde player.
 ///
-/// To play a [Recorder] that registered it self by [registerSrource].
+/// To play a [Recorder] that registered it self by [registerSource].
 /// And also , it can control the recorder's functional by [startRecord] and [finishRecord].
 ///
 /// * more see : [PlayerStatus]
@@ -88,7 +88,7 @@ class RecordPlayer{
   final Queue<TapeSlot> _timeLine = Queue();
 
   ///Hold some [Recorder]'s [RecordPlayerListener] and identify by [SourceType].
-  final Map<SourceType, RecordPlayerListener> _listenrs = {};
+  final Map<SourceType, RecordPlayerListener> _listeners = {};
 
   final ValueNotifier<PlayerStatus> playerStatus = ValueNotifier(PlayerStatus.shutdown);
 
@@ -105,9 +105,9 @@ class RecordPlayer{
 
 
   ///[Recorder] register a [RecordPlayerListener] by this method.
-  ///And will make it have reocrder and play function.
-  void registerSrource(SourceType type, RecordPlayerListener listenr) {
-    _listenrs[type] = listenr;
+  ///And will make it have reocorder and play function.
+  void registerSource(SourceType type, RecordPlayerListener listener) {
+    _listeners[type] = listener;
   }
 
   ///record a event.
@@ -118,7 +118,7 @@ class RecordPlayer{
   ///Erase all [_timeLine]'s event and related [Recorder._recordQueue].
   void eraseTape() {
     _timeLine.clear();
-    _listenrs.forEach((key, value) {
+    _listeners.forEach((key, value) {
       value.cleanRecords();
     });
   }
@@ -133,9 +133,9 @@ class RecordPlayer{
       _timeLine.removeLast();
     }
     if(withType != null) {
-      _listenrs[withType]?.removeLast();
+      _listeners[withType]?.removeLast();
     } else {
-      _listenrs.forEach((key, value) {
+      _listeners.forEach((key, value) {
         value.removeLast();
       });
     }
@@ -153,7 +153,7 @@ class RecordPlayer{
   Stream<RecordBundle> _decodeTape() async* {
     while(_timeLine.isNotEmpty) {
       final slot = _timeLine.removeFirst();
-      final bundle = _listenrs[slot.type]?.extractRecordBundle(slot.startTime);
+      final bundle = _listeners[slot.type]?.extractRecordBundle(slot.startTime);
       if(bundle != null && !bundle.isErrorBundle) {
         yield bundle;
         if(_timeLine.isNotEmpty) {
@@ -166,15 +166,15 @@ class RecordPlayer{
   }
 
 
-  ///Remove all real event that relatited [_timeLine] to a tape(queue).
+  ///Remove all real event that related [_timeLine] to a tape(queue).
   ///
-  /// * You can use it for serialize and transfor anthor device to replay it.
+  /// * You can use it for serialize and transfer another device to replay it.
   /// * Ensure target device has this plugin too.
   Queue<RecordBundle> exportTape() {
     final Queue<RecordBundle> tape = Queue();
     while(_timeLine.isNotEmpty) {
       final slot = _timeLine.removeFirst();
-      final bundle = _listenrs[slot.type]?.extractRecordBundle(slot.startTime);
+      final bundle = _listeners[slot.type]?.extractRecordBundle(slot.startTime);
       if(bundle != null) {
         tape.add(bundle);
       }
@@ -188,7 +188,7 @@ class RecordPlayer{
   /// * Make sure you [startRecord] before call this method, and [finishRecord]
   /// * after this.
   void loadRecords<T extends RecordBundle>(T bundle) {
-    _listenrs[bundle.type]?.loadRecordBundle(bundle);
+    _listeners[bundle.type]?.loadRecordBundle(bundle);
   }
 
 }
