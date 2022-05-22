@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:behavior_recorder_of_kit/recorder.dart';
@@ -141,11 +142,15 @@ class RecordPlayer{
     }
   }
 
+  Completer? _performCompleter;
+
   ///Start play records.
   void play() {
     playerStatus.value = PlayerStatus.playing;
-    _decodeTape().listen((bundle) {
-      bundle.perform();
+    _decodeTape().listen((bundle) async {
+      await bundle.perform();
+      _performCompleter?.complete();
+      _performCompleter = null;
     });
   }
 
@@ -155,7 +160,9 @@ class RecordPlayer{
       final slot = _timeLine.removeFirst();
       final bundle = _listeners[slot.type]?.extractRecordBundle(slot.startTime);
       if(bundle != null && !bundle.isErrorBundle) {
+        _performCompleter = Completer();
         yield bundle;
+        await _performCompleter?.future;
         if(_timeLine.isNotEmpty) {
           final nextStartTime = _timeLine.first.startTime;
           await Future.delayed(Duration(milliseconds: nextStartTime - bundle.endTime));

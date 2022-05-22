@@ -33,10 +33,11 @@ class TextInputEventBundle extends RecordBundle<MethodCall>{
   MethodCall get eventRecord => methodCall;
 
   @override
-  void perform() {
+  Future perform() async {
     _updateRecord();
     final bytedata = SystemChannels.textInput.codec.encodeMethodCall(methodCall);
     ServicesBinding.instance?.defaultBinaryMessenger.handlePlatformMessage(SystemChannels.textInput.name, bytedata, null);
+    return Future.value();
   }
 
   void _updateRecord() {

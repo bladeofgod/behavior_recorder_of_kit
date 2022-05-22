@@ -35,10 +35,12 @@ class PointerEventBundle extends RecordBundle<Queue<PointerEvent>>{
   Queue<PointerEvent> get eventRecord => _eventQueue;
 
   @override
-  void perform() {
+  Future perform() async {
     while(_eventQueue.isNotEmpty) {
+      await WidgetsBinding.instance?.endOfFrame;
       GestureBinding.instance?.handlePointerEvent(_eventQueue.removeFirst());
     }
+    return Future.value();
   }
 
 

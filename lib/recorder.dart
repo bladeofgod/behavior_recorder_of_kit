@@ -28,7 +28,7 @@ abstract class RecordBundle<T>{
   T get eventRecord;
 
   ///Perform the [eventRecord]
-  void perform();
+  Future perform();
 
 
 }
