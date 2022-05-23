@@ -142,15 +142,16 @@ class RecordPlayer{
     }
   }
 
-  Completer? _performCompleter;
+
+  Completer? _performSignal;
 
   ///Start play records.
   void play() {
     playerStatus.value = PlayerStatus.playing;
     _decodeTape().listen((bundle) async {
       await bundle.perform();
-      _performCompleter?.complete();
-      _performCompleter = null;
+      _performSignal?.complete();
+      _performSignal = null;
     });
   }
 
@@ -160,9 +161,9 @@ class RecordPlayer{
       final slot = _timeLine.removeFirst();
       final bundle = _listeners[slot.type]?.extractRecordBundle(slot.startTime);
       if(bundle != null && !bundle.isErrorBundle) {
-        _performCompleter = Completer();
+        _performSignal = Completer();
         yield bundle;
-        await _performCompleter?.future;
+        await _performSignal?.future;
         if(_timeLine.isNotEmpty) {
           final nextStartTime = _timeLine.first.startTime;
           await Future.delayed(Duration(milliseconds: nextStartTime - bundle.endTime));
